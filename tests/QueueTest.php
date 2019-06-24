@@ -7,12 +7,12 @@ class QueueTest extends TestCase
 {
     private $queue;
 
-    public function setUp()
+    public function setUp():void
     {
         $this->queue = new Queue();
     }
 
-    public function tearDown()/* The :void return type declaration that should be here would cause a BC issue */
+    public function tearDown():void /* The :void return type declaration that should be here would cause a BC issue */
     {
         unset($this->queue);
     }
@@ -41,14 +41,21 @@ class QueueTest extends TestCase
 
     /**
      * Test if an item has been removed from the queue
-     * @depends testAnItemAddedToTheQueue
      */
-    public function testAnItemRemovedFromTheQueue(Queue $queue)
+    public function testAnItemRemovedFromTheQueue()
     {
-        //$this->queue->push("one");
-        $item = $queue->pop();
+        $this->queue->push("one");
+        $item = $this->queue->pop();
 
         $this->assertEquals(0,$this->queue->getCount());
         $this->assertEquals('one', $item);
+    }
+
+    public function testAnItemIsRemovedFromTheFrontOfTheQueue()
+    {
+        $this->queue->push('first');
+        $this->queue->push('second');
+        $first = $this->queue->pop();
+        self::assertEquals('first', $first);
     }
 }
